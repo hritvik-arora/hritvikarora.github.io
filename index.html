@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hritvik Arora · Computational Geoscience</title>
+  <meta name="description" content="BS-MS student at IISER Kolkata working on computational geoscience, scientific image analysis and structural geology.">
+  <!-- Fonts: Schibsted Grotesk (text) + JetBrains Mono (technical labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== ANIMATED BACKGROUND (all layers are fixed; script.js moves them at different speeds) ===== -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-depth"></div>                                   <!-- 1. subsurface gradient layers (CSS only) -->
+  <div class="bg-layer" data-depth="0.12"><svg id="contours" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice"></svg></div> <!-- 2. contour lines, filled by JS -->
+  <div class="bg-layer" data-depth="0.30">                       <!-- 3. fault / plate-boundary lines -->
+    <svg viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+      <path d="M-50 160 C250 220 380 120 640 260 S1000 330 1260 250"/>
+      <path d="M-50 560 C200 500 420 640 700 560 S1050 470 1260 600"/>
+      <path d="M300 -40 C340 200 260 420 380 640 S430 820 400 960" class="dash"/>
+      <path d="M900 -40 C860 180 960 380 880 560 S960 800 930 960" class="dash"/>
+    </svg>
+  </div>
+  <canvas id="field"></canvas>                                   <!-- 4+5. particles and seismic waves -->
+</div>
+
+<!-- ===== STICKY NAVIGATION ===== -->
+<header class="nav">
+  <a class="brand" href="#hero">Hritvik Arora</a>
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+  <nav id="menu">
+    <a href="#about">About</a>
+    <a href="#interests">Interests</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#leadership">Leadership</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===== 1. HERO ===== -->
+<section id="hero" class="hero">
+  <div class="hero-text">
+    <p class="label">IISER KOLKATA · BS-MS </p>
+    <h1>Hritvik <span>Arora</span></h1>
+    <p class="hero-tags">Computational Geoscience<br>Geomechanics and Deformation<br>Earth Materials and Microstructures</p>
+    <p class="lede">Using computational methods and numerical modelling to investigate deformation and processes in Earth materials.</p>
+    <div class="actions">
+      <a class="btn primary" href="#projects">Explore Research</a>
+      <a class="btn" href="cv.pdf" download>Download CV</a> <!-- put your cv.pdf next to index.html -->
+    </div>
+  </div>
+  <!-- Hero visual: coordinate grid with a seismic trace -->
+  <figure class="hero-fig" aria-hidden="true">
+    <svg viewBox="0 0 400 300">
+      <defs><pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="currentColor" stroke-width=".4"/></pattern></defs>
+      <rect width="400" height="300" fill="url(#grid)" class="grid"/>
+      <path class="trace" d="M0 150 L40 150 L55 120 L70 190 L90 70 L110 230 L135 130 L160 165 L190 145 L230 152 L270 148 L400 150"/>
+      <circle class="pulse" cx="90" cy="70" r="5"/>
+    </svg>
+    <figcaption>Fig. 0 — synthetic waveform, x: time, y: amplitude</figcaption>
+  </figure>
+</section>
+
+<!-- ===== 2. ABOUT ===== -->
+<section id="about" class="section reveal">
+  <p class="label">ABOUT</p>
+  <div class="two-col">
+    <div>
+      <h2>Quantifying what Rocks Record</h2>
+      <p>I am a BS–MS student at the Indian Institute of Science Education and Research Kolkata, interested in computational approaches to understanding Earth materials and geological processes. My current interests lie at the intersection of geomechanics, deformation, and computational geoscience. I am particularly interested in developing numerical models and computational tools that turn complex geological processes into measurable, reproducible results.</p>
+      <p>I build tools that turn geological data into measurements that can be quantified, compared, and used to investigate how Earth materials deform and evolve. <!-- Replace with your own story --></p>
+    </div>
+    <aside class="panel">
+      <p class="label">CURRENTLY EXPLORING</p>
+      <ul>
+        <li>Computational geomechanics</li>
+        <li>Physics of deformation and failure</li>
+        <li>Numerical models of rock deformation</li>
+        <li>Computational methods for Earth materials</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ===== 3. RESEARCH INTERESTS (cards get a pointer-following glow, see script.js) ===== -->
+<section id="interests" class="section reveal">
+  <p class="label">RESEARCH INTERESTS</p>
+  <h2>Where Earth science meets computation</h2>
+  <div class="cards">
+    <div class="card"><span class="ix">R1</span><h3>Computational Geoscience</h3></div>
+    <div class="card"><span class="ix">R2</span><h3>Geomechanics</h3></div>
+    <div class="card"><span class="ix">R6</span><h3>Rock Deformation</h3></div>
+    <div class="card"><span class="ix">R7</span><h3>Numerical Modelling</h3></div>
+    <div class="card"><span class="ix">R3</span><h3>Earth Materials</h3></div>
+    <div class="card"><span class="ix">R5</span><h3>Structural Geology</h3></div>
+  </div>
+</section>
+
+<!-- ===== 4. FEATURED PROJECTS (click a header to expand; copy a block to add more) ===== -->
+<section id="projects" class="section reveal">
+  <p class="label">FEATURED PROJECTS</p>
+  <h2>Tools I am building</h2>
+
+  <article class="project">
+    <button class="project-head" aria-expanded="false">
+      <span class="thumb"><img src="images/grainsegmenter.png" alt="GrainSegmenter"></span>
+      <span><span class="label">PROJECT 01</span><strong>GrainSegmenter</strong><em>Automated Grain Segmentation for Petrographic Images</em></span>
+    </button>
+    <div class="more"><div>
+      <p>Developed a MATLAB-based tool for semi-automated grain-boundary detection and segmentation in petrographic thin-section images. The tool assists in identifying and labeling grain boundaries while providing interactive editing capabilities to correct segmentation errors and refine the results.</p>
+      <dl><dt>Technology</dt><dd>MATLAB, Image Processing, Computer Vision</dd><dt>Research area</dt><dd>Digital petrography</dd></dl>
+      <a class="btn small" href="#">View Project</a> <a class="btn small" href="#">GitHub</a>
+    </div></div>
+  </article>
+
+  <article class="project">
+    <button class="project-head" aria-expanded="false">
+      <span class="thumb"><img src="images/myflow.png" alt="MYflow"></span>
+      <span><span class="label">PROJECT 02</span><strong>MYflow</strong><em>Computational Grain Analysis &amp; Algorithmic Development</em></span>
+    </button>
+    <div class="more"><div>
+      <p>Investigated algorithmic issues affecting grain analysis and composite grain counting in MYflow. Improved the RGB quantization, boundary detection, and phase-selection workflow, resulting in a more reliable and effective analysis process that was subsequently tested and positively evaluated by the original developer.</p>
+      <dl><dt>Technology</dt><dd>MATLAB, Algorithm Development</dd><dt>Research area</dt><dd>Microstructural analysis</dd></dl>
+      <a class="btn small" href="#">View Project</a> <a class="btn small" href="#">GitHub</a>
+    </div></div>
+  </article>
+
+  <article class="project">
+    <button class="project-head" aria-expanded="false">
+     <span class="thumb"><img src="images/psuedotech.png" alt="Pseudotachylyte"></span>
+      <span><span class="label">PROJECT 03</span><strong>Pseudotachylyte Formation Simulator</strong><em>SPH-Based Numerical Modelling of Coseismic Frictional Melting</em></span>
+    </button>
+    <div class="more"><div>
+      <p>Developing a browser-based numerical simulator to model coseismic frictional melting, melt transport, injection-vein formation and quenching during pseudotachylyte generation. The model uses Smoothed Particle Hydrodynamics (SPH) coupled with a thermal grid to simulate fluid, thermal and phase-change processes along a slipping fault.</p>
+      <dl><dt>Technology</dt><dd>JavaScript, SPH, Numerical Modelling, Thermal Modelling</dd><dt>Research area</dt><dd>Rock Deformation</dd></dl>
+      <a class="btn small" href="#">View Project</a> <a class="btn small" href="#">GitHub</a>
+    </div></div>
+  </article>
+</section>
+
+<!-- ===== 5. RESEARCH EXPERIENCE: strata like a geological cross-section ===== -->
+<section id="experience" class="section reveal">
+  <p class="label">RESEARCH EXPERIENCE</p>
+  <h2>Cross-section</h2>
+  <div class="strata">
+    <div class="layer l1"><span class="depth">2026</span>
+      <h3>Structural Geology Research Internship</h3><p class="meta">IIT Roorkee</p>
+      <p>Worked on computational analysis of petrographic datasets for structural geology applications, using MATLAB for scientific programming and geological data analysis. Prepared technical documentation and research reports related to the research work.</p></div>
+    <div class="layer l2"><span class="depth">2026</span>
+      <h3>MYflow — Algorithmic Validation & Enhancement</h3><p class="meta"></p>
+      <p>Investigated and improved MYflow’s composite-mode workflow for petrographic grain analysis, addressing grain-count inconsistencies, boundary detection, phase assignment, and input validation. Documented the work in a technical validation report.</p></div>
+  </div>
+</section>
+
+<!-- ===== 6. LEADERSHIP (deliberately styled differently) ===== -->
+<section id="leadership" class="section reveal">
+  <div class="lead">
+    <p class="label">LEADERSHIP</p>
+    <h2 class="leadership-item">Fest Coordinator</h2>
+    <p class="meta">Inquivesta XIII · IISER Kolkata</p>
+    <ul class="stats">
+      <li><b> 9+</b>teams</li>
+      <li><b>16+</b>events</li>
+      <li><b>400+</b>participants</li>
+    </ul>
+    <p>Leading the overall planning, coordination and execution of Inquivesta XIII, IISER Kolkata’s annual science festival. Overseeing 9+ organizing teams and coordinating 16+ events with 400+ expected participants, while managing cross-team collaboration, fest-level decisions, event execution and on-ground operations.</p>
+     <h2 class="leadership-item">Treasurer</h2>
+    <p class="meta">Cricket Club, IISER Kolkata</p>
+    <p>Managed club finances, budgeting and reimbursements while coordinating financial activities for tournaments and club events.</p>
+    <h2 class="leadership-item">Wicket Keeper Batsman</h2>
+    <p class="meta">Inter IISER Sports Meet, IISER Kolkata</p>
+    <p>Representing IISER Kolkata as a wicket-keeper batsman in institute-level cricket. Contributing with both reliable wicket-keeping and middle-order batting.</p>
+  </div>
+  
+</section>
+
+<!-- ===== 7. SKILLS (chips, no star ratings) ===== -->
+<section id="skills" class="section reveal">
+  <p class="label">SKILLS</p>
+  <h2>Toolkit</h2>
+  <div class="skills">
+    <div><h3>Programming</h3><ul class="chips"><li>MATLAB</li><li>Python</li><li>Git/GitHub</li></ul></div>
+    <div><h3>Scientific Computing</h3><ul class="chips"><li>NumPy</li><li>SciPy</li><li>Matplotlib</li></ul></div>
+    <div><h3>Image Analysis</h3><ul class="chips"><li>OpenCV</li><li>scikit-image</li><li>Segmentation</li><li>Computer Vision</li></ul></div>
+    <div><h3>Earth Sciences</h3><ul class="chips"><li>Structural Geology</li><li>Petrography</li><li>Geochemistry</li><li>Geophysics</li></ul></div>
+  </div>
+</section>
+
+<!-- ===== 8. CONTACT ===== -->
+<section id="contact" class="section contact reveal">
+  <h2>Interested in research collaborations, internships or computational Earth-science projects?</h2>
+  <div class="actions">
+    <a class="btn primary" href="mailto:ha24ms105@iiserkol.ac.in">Email</a>
+    <a class="btn" href="https://github.com/hritvik-arora" target="_blank" rel="noopener">GitHub</a>
+    <a class="btn" href="https://linkedin.com/in/hritvik-arora-921631272" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn" href="cv.pdf" download>CV</a>
+  </div>
+  <p class="foot">© 2026 Hritvik Arora · IISER Kolkata</p>
+</section>
+
+</main>
+<script src="script.js"></script>
+</body>
+</html>

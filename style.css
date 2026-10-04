@@ -1,0 +1,218 @@
+/* =========================================================
+   1. DESIGN TOKENS — change colours/fonts here, not below.
+   ========================================================= */
+:root {
+  --bg: #0b0d0c;  --bg2: #111513;  --bg3: #171b18;   /* near-black base layers */
+  --green: #1e2d25;  --slate: #2a3439;  --brown: #2b221b; /* geological secondary */
+  --text: #d9dcd6;  --muted: #8d958f;  --line: rgba(217, 220, 214, .12);
+  --burnt: #c0612b;  --ochre: #c9972e;  --amber: #e0a24a;  /* accents: use sparingly */
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* =========================================================
+   2. BASE
+   ========================================================= */
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 70px; }  /* smooth scroll + offset for sticky nav */
+body { background: var(--bg); color: var(--text); font: 400 1.05rem/1.7 var(--sans); overflow-x: hidden; }
+h1, h2, h3 { line-height: 1.1; letter-spacing: -.02em; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 700; margin-bottom: 1.2rem; max-width: 22ch; }
+h3 { font-size: 1.05rem; font-weight: 500; }
+p { max-width: 62ch; margin-bottom: 1rem; color: #c3c8c1; }
+a { color: var(--amber); text-decoration: none; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }  /* keyboard focus */
+code { font-family: var(--mono); font-size: .85em; color: var(--ochre); }
+
+/* Small technical label (monospace) */
+.label { font: 500 .72rem/1 var(--mono); letter-spacing: .14em; color: var(--ochre); margin-bottom: 1rem; display: block; }
+.meta { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+
+/* =========================================================
+   3. BACKGROUND — fixed layers behind everything
+   ========================================================= */
+.bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: var(--bg); }
+/* Subsurface: horizontal strata of green / slate / brown fading downward */
+.bg-depth { position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 0%, rgba(30, 45, 37, .55), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 90% 100%, rgba(43, 34, 27, .6), transparent 70%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 45%, var(--bg3) 75%, #15120f 100%); }
+/* Layers are taller than the screen so parallax shifting never shows gaps (script.js moves them) */
+.bg-layer { position: absolute; left: 0; width: 100%; top: 0; height: 140%; will-change: transform; }
+.bg-layer svg { width: 100%; height: 100%; display: block; }
+#contours { stroke: var(--ochre); fill: none; stroke-width: 1; opacity: .13; animation: drift 90s ease-in-out infinite alternate; }
+.bg-layer:nth-child(3) svg { stroke: var(--slate); fill: none; stroke-width: 1.4; opacity: .55; }
+.bg-layer .dash { stroke-dasharray: 6 10; }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; }
+@keyframes drift { to { transform: translate3d(-2%, 1.5%, 0) scale(1.04); } }
+
+/* =========================================================
+   4. NAVIGATION (sticky)
+   ========================================================= */
+.nav { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center;
+  padding: .9rem clamp(1rem, 5vw, 4rem); background: rgba(11, 13, 12, .78); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.brand { font: 700 1rem var(--sans); color: var(--text); }
+.nav nav { display: flex; gap: 1.6rem; }
+.nav nav a { font: 500 .8rem var(--mono); color: var(--muted); padding: .3rem 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+.nav nav a:hover, .nav nav a.active { color: var(--amber); border-color: var(--amber); }  /* .active is set by script.js */
+.nav-toggle { display: none; background: none; border: 1px solid var(--line); color: var(--text); font: 500 .8rem var(--mono); padding: .4rem .8rem; border-radius: 4px; }
+
+/* =========================================================
+   5. LAYOUT + SECTIONS
+   ========================================================= */
+.section, .hero { padding: clamp(4rem, 10vw, 8rem) clamp(1.2rem, 6vw, 5rem); max-width: 1200px; margin: 0 auto; }
+.two-col { display: grid; grid-template-columns: 1.6fr 1fr; gap: 3rem; align-items: start; }
+.panel { border: 1px solid var(--line); border-left: 2px solid var(--burnt); padding: 1.4rem; background: rgba(23, 27, 24, .6); }
+.panel ul { list-style: none; padding: 0; }
+.panel li { padding: .5rem 0; border-top: 1px solid var(--line); font-size: .95rem; color: #c3c8c1; }
+.panel li:first-child { border: 0; }
+
+/* Scroll reveal: script.js adds .in when a section enters the screen */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* =========================================================
+   6. HERO
+   ========================================================= */
+.hero { min-height: calc(100vh - 60px); display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem; align-items: center; }
+h1 { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; margin-bottom: 1.4rem; }
+h1 span {
+  color: var(--burnt);
+}
+.hero-tags { font: 500 clamp(1rem, 2vw, 1.25rem)/1.6 var(--sans); color: var(--text); margin-bottom: 1.2rem; }
+.lede { font-size: 1.15rem; color: var(--muted); }
+.hero-fig { border: 1px solid var(--line); padding: .8rem; background: rgba(17, 21, 19, .6); }
+.hero-fig svg { width: 100%; display: block; color: var(--slate); }
+.hero-fig .grid { opacity: .8; }
+.hero-fig .trace { fill: none; stroke: var(--amber); stroke-width: 1.6; stroke-dasharray: 700; animation: draw 6s ease-out infinite; }
+.hero-fig .pulse { fill: var(--burnt); animation: blink 2.4s ease-in-out infinite; }
+.hero-fig figcaption { font: .68rem var(--mono); color: var(--muted); margin-top: .6rem; }
+@keyframes draw { from { stroke-dashoffset: 700; } 60%, to { stroke-dashoffset: 0; } }
+@keyframes blink { 50% { opacity: .2; } }
+
+/* =========================================================
+   7. BUTTONS
+   ========================================================= */
+.actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+.btn { display: inline-block; padding: .75rem 1.3rem; border: 1px solid var(--line); border-radius: 3px; color: var(--text); font: 500 .85rem var(--mono); transition: transform .2s, border-color .2s, background .2s; }
+.btn:hover { transform: translateY(-2px); border-color: var(--amber); }
+.btn.primary { background: var(--burnt); border-color: var(--burnt); color: #fff; }
+.btn.primary:hover { background: #d36f35; }
+.btn.small { padding: .45rem .9rem; font-size: .75rem; margin-right: .4rem; }
+
+/* =========================================================
+   8. RESEARCH INTERESTS (cards)
+   ========================================================= */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-top: 2rem;
+}
+.card { position: relative; min-height: 140px; padding: 1.3rem; background: var(--bg2); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+/* Glow follows the pointer: --mx / --my are set in script.js. Contour rings sit under it. */
+.card::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: repeating-radial-gradient(circle at var(--mx, 50%) var(--my, 50%), transparent 0 14px, rgba(201, 151, 46, .14) 14px 15px); }
+.card:hover::before { opacity: 1; }
+.card:hover .ix { color: var(--amber); }
+.ix { font: .72rem var(--mono); color: var(--muted); transition: color .2s; }
+.card h3 { position: relative; }
+
+/* =========================================================
+   9. PROJECTS (expandable)
+   ========================================================= */
+.project { border: 1px solid var(--line); background: rgba(17, 21, 19, .7); margin-top: 1.2rem; transition: border-color .25s; }
+.project:hover { border-color: rgba(224, 162, 74, .5); }
+.project-head { width: 100%; display: grid; grid-template-columns: 200px 1fr; gap: 1.5rem; align-items: center; background: none; border: 0; color: inherit; text-align: left; padding: 1rem; cursor: pointer; font: inherit; }
+.project-head strong { display: block; font-size: 1.7rem; letter-spacing: -.02em; }
+.project-head em { font-style: normal; color: var(--muted); font-size: .95rem; }
+.thumb { aspect-ratio: 4/3; display: grid; place-items: center; font: .65rem var(--mono); color: var(--muted); text-align: center;
+  background: repeating-linear-gradient(135deg, var(--green) 0 8px, var(--bg3) 8px 16px); border: 1px solid var(--line); }
+.thumb {
+    overflow: hidden;
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform .4s ease;
+}
+
+.project:hover .thumb img {
+    transform: scale(1.04);
+}
+  /* Expand/collapse using the grid-rows trick so height animates smoothly */
+.more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s ease; }
+.more > div { overflow: hidden; padding: 0 1rem; }
+.project.open .more { grid-template-rows: 1fr; }
+.project.open .more > div { padding-bottom: 1.2rem; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: .3rem 1.2rem; margin-bottom: 1.2rem; font-size: .92rem; }
+dt { font: .75rem var(--mono); color: var(--ochre); padding-top: .2rem; }
+
+/* =========================================================
+   10. EXPERIENCE — strata (cross-section)
+   ========================================================= */
+.strata { margin-top: 2rem; border: 1px solid var(--line); }
+.layer { position: relative; padding: 1.6rem 1.6rem 1.2rem 6.5rem; border-top: 1px dashed rgba(217, 220, 214, .22); }  /* dashed line = contact between layers */
+.layer:first-child { border-top: 0; }
+.l1 { background: linear-gradient(180deg, rgba(30, 45, 37, .75), rgba(30, 45, 37, .35)); }
+.l2 { background: linear-gradient(180deg, rgba(42, 52, 57, .6), rgba(42, 52, 57, .3)); }
+.l3 { background: linear-gradient(180deg, rgba(43, 34, 27, .75), rgba(43, 34, 27, .35)); }
+.depth { position: absolute; left: 1.2rem; top: 1.6rem; font: 500 .85rem var(--mono); color: var(--amber); }
+
+/* =========================================================
+   11. LEADERSHIP (different: bordered slab with big placeholders)
+   ========================================================= */
+.lead { border-left: 3px solid var(--burnt); padding: 1rem 0 1rem clamp(1.2rem, 4vw, 3rem); background: linear-gradient(90deg, rgba(192, 97, 43, .08), transparent 60%); }
+.stats { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 2.5rem; margin: 1.6rem 0; font: .8rem var(--mono); color: var(--muted); }
+.stats b { display: block; font: 700 2rem var(--sans); color: var(--amber); }
+.leadership-item {
+    border-left: 2px solid var(--burnt);
+    padding-left: 2rem;
+}
+
+.leadership-item + .leadership-item {
+    margin-top: calc(5rem + 10px);
+}
+/* =========================================================
+   12. SKILLS (chips)
+   ========================================================= */
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 2rem; }
+.skills h3 { color: var(--muted); font: 500 .75rem var(--mono); margin-bottom: .8rem; }
+.chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.chips li { padding: .35rem .8rem; border: 1px solid var(--line); border-radius: 99px; font-size: .88rem; transition: border-color .2s, color .2s; }
+.chips li:hover { border-color: var(--amber); color: var(--amber); }
+
+/* =========================================================
+   13. CONTACT
+   ========================================================= */
+.contact { text-align: left; padding-bottom: 3rem; }
+.contact h2 { max-width: 26ch; }
+.foot { margin-top: 5rem; font: .72rem var(--mono); color: var(--muted); }
+
+/* =========================================================
+   14. RESPONSIVE
+   ========================================================= */
+@media (max-width: 800px) {
+  .hero, .two-col { grid-template-columns: 1fr; }
+  .hero { min-height: auto; }
+  .project-head { grid-template-columns: 1fr; }
+  .thumb { aspect-ratio: 16/6; }
+  .layer { padding-left: 1.4rem; padding-top: 3rem; }
+  .nav-toggle { display: block; }
+  .nav nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--bg2); border-bottom: 1px solid var(--line); }
+  .nav nav.open { display: flex; }
+  .nav nav a { padding: .9rem 1.4rem; border: 0; }
+}
+
+/* Reduced motion: stop all animation and reveal everything at once */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
